@@ -26,7 +26,7 @@ public class Reservation {
 		this.car = car;
 		this.pickUpLocation = pickUpLocation;
 		this.dropOffLocation = dropOffLocation;
-		this.extras = (extras != null) ? extras : new ArrayList<>(); // Ensure list is not null
+		this.extras = extras;
 
 		this.creationDate = LocalDateTime.now();
 		this.status = ReservationStatus.ACTIVE;
