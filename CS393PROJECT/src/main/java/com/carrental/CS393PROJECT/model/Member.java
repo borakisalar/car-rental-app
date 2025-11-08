@@ -1,6 +1,5 @@
 package com.carrental.CS393PROJECT.model;
 
-
 public class Member {
 	private String name;
 	private String address;

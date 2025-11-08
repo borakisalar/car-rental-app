@@ -1,6 +1,5 @@
 package com.carrental.CS393PROJECT.model;
 
-
 public class Location {
 	private int code;
 	private String name;

@@ -1,6 +1,5 @@
 package com.carrental.CS393PROJECT.model;
 
-
 public class ExtraService {
 	private String name;
 	private double price;

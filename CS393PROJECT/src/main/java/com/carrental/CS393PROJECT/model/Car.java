@@ -1,6 +1,5 @@
 package com.carrental.CS393PROJECT.model;
 
-
 public class Car {
 	private String barcode;
 	private String licensePlateNumber;
