@@ -1,4 +1,5 @@
-package com.carrental.CSC393PROJECT.model;
+package com.carrental.CS393PROJECT.model;
+
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;

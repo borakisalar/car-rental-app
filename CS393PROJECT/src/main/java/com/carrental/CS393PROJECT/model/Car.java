@@ -1,4 +1,5 @@
-package com.carrental.CSC393PROJECT.model;
+package com.carrental.CS393PROJECT.model;
+
 
 public class Car {
 	private String barcode;
@@ -103,3 +104,4 @@ public class Car {
 	public void setLocation(Location location) {
 		this.location = location;
 	}
+}
