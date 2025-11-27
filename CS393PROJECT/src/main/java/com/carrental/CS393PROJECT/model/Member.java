@@ -1,13 +1,22 @@
 package com.carrental.CS393PROJECT.model;
 
+import jakarta.annotation.Generated;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-
+import jakarta.persistence.Table;
+@Entity
+@Table(name = "Members")
 public class Member {
 	private String name;
 	private String address;
 	private String email;
 	private String phone;
 	private String drivingLicenseNumber;
+	
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 	
 	public Member(Long id, String name, String address, String email, String phone, String drivingLicenseNumber) {
