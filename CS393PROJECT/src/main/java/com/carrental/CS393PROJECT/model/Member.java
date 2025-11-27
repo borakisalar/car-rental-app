@@ -6,8 +6,11 @@ public class Member {
 	private String email;
 	private String phone;
 	private String drivingLicenseNumber;
+	private Long id;
 	
-	public Member(String name, String address, String email, String phone, String drivingLicenseNumber) {
+	public Member(Long id, String name, String address, String email, String phone, String drivingLicenseNumber) {
+	    this.id = id;
+		
         this.name = name;
         this.address = address;
         this.email = email;
@@ -15,6 +18,10 @@ public class Member {
         this.drivingLicenseNumber = drivingLicenseNumber;
     }
 	
+	public Long getId() {
+		return id;
+	}
+
 	public String getName() {
 		return name;
 	}

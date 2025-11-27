@@ -21,9 +21,7 @@ public class Reservation {
 	
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Long id;
-	
-	@Column(unique = true, length = 8)
+	@Column(length = 8)
 	private String reservationNumber;
 	
 	

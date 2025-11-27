@@ -18,9 +18,7 @@ import jakarta.persistence.Table;
 public class Car {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Long id;
-	
-	@Column(unique = true, nullable = false)
+	@Column(nullable = false)
 	private String barcode;
 	
 	private String licensePlateNumber;
