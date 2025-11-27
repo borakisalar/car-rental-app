@@ -28,6 +28,10 @@ public class Member {
         this.drivingLicenseNumber = drivingLicenseNumber;
     }
 	
+	public Long getId() {
+		return id;
+	}
+
 	public String getName() {
 		return name;
 	}
