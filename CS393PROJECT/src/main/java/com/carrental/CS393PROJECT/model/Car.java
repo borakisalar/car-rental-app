@@ -1,17 +1,48 @@
 package com.carrental.CS393PROJECT.model;
-
+import jakarta.persistence.CascadeType;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
+import jakarta.persistence.FetchType;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.JoinTable;
+import jakarta.persistence.ManyToMany;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.Table;
+@Entity
+@Table(name = "Cars")
 public class Car {
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	private Long id;
+	
+	@Column(unique = true, nullable = false)
 	private String barcode;
+	
 	private String licensePlateNumber;
 	private int numberOfSeats;
 	private String brand;
 	private String model;
 	private double mileage;
-	private TransmissionType transmissionType;
+	
 	private double dailyPrice;
 	private String category;
-	private Location location;
+	
+	
+	@Enumerated(EnumType.STRING)
 	private CarStatus status;
+	
+	@Enumerated(EnumType.STRING)
+	private TransmissionType transmissionType;
+	
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "location_id")
+	private Location location;
+	
 	
 	public Car(String barcode, String licensePlateNumber, int numberOfSeats, String brand, String model,
 			TransmissionType transmissionType, double dailyPrice, String category, Location location) {

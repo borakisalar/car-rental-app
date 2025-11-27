@@ -3,6 +3,7 @@ package com.carrental.CS393PROJECT.model;
 public class Location {
 	private int code;
 	private String name;
+
 	
 	public Location(int code, String name) {
         this.code = code;
