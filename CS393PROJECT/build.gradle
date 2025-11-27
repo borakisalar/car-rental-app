@@ -7,7 +7,7 @@ plugins {
 
 group = 'com.carrental'
 version = '0.0.1-SNAPSHOT'
-description = 'Spring project for CSC393'
+description = 'Car Rental Project for CSC393'
 
 java {
 	toolchain {
@@ -26,8 +26,6 @@ dependencies {
 	testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
 	developmentOnly 'org.springframework.boot:spring-boot-devtools'
 	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
-	runtimeOnly  'org.apache.derby:derbyclient:10.15.2.0'
-    runtimeOnly  'org.apache.derby:derbytools:10.15.2.0'
     implementation 'org.mapstruct:mapstruct:1.6.3'
     annotationProcessor 'org.mapstruct:mapstruct-processor:1.6.3'
 }
