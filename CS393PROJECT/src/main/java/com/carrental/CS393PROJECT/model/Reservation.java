@@ -24,7 +24,7 @@ public class Reservation {
 	@Column(length = 8)
 	private String reservationNumber;
 	
-	
+
 	private LocalDateTime creationDate;
 	private LocalDateTime pickUpDateTime;
 	private LocalDateTime dropOffDateTime;

@@ -1,16 +1,15 @@
 package com.carrental.CS393PROJECT.model;
 
+import jakarta.persistence.Id;
+
 public class Member {
 	private String name;
 	private String address;
 	private String email;
 	private String phone;
 	private String drivingLicenseNumber;
-	private Long id;
 	
-	public Member(Long id, String name, String address, String email, String phone, String drivingLicenseNumber) {
-	    this.id = id;
-		
+	public Member(String name, String address, String email, String phone, String drivingLicenseNumber) {
         this.name = name;
         this.address = address;
         this.email = email;
@@ -18,10 +17,6 @@ public class Member {
         this.drivingLicenseNumber = drivingLicenseNumber;
     }
 	
-	public Long getId() {
-		return id;
-	}
-
 	public String getName() {
 		return name;
 	}

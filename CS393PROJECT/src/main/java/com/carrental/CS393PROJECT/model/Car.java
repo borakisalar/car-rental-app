@@ -18,7 +18,6 @@ import jakarta.persistence.Table;
 public class Car {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column(nullable = false)
 	private String barcode;
 	
 	private String licensePlateNumber;
