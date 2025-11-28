@@ -18,7 +18,9 @@ public class Member {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
-	
+	public Member() {
+		
+	}
 	public Member(Long id, String name, String address, String email, String phone, String drivingLicenseNumber) {
         this.id = id;
 		this.name = name;

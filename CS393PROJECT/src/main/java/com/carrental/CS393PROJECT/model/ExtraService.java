@@ -17,6 +17,11 @@ public class ExtraService {
 	@Column(nullable = false, unique = true)
 	private String name;
 	private double price;
+	public ExtraService() {
+		
+	}
+		
+	
 	
 	public ExtraService(Long id, String name, double price) {
 		this.id = id;

@@ -17,7 +17,6 @@ import jakarta.persistence.Table;
 @Table(name = "Cars")
 public class Car {
 	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private String barcode;
 	
 	private String licensePlateNumber;
@@ -28,7 +27,9 @@ public class Car {
 	
 	private double dailyPrice;
 	private String category;
-	
+	public Car() {
+		
+	}
 	
 	@Enumerated(EnumType.STRING)
 	private CarStatus status;

@@ -6,6 +6,8 @@ import java.util.ArrayList;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -21,8 +23,7 @@ public class Reservation {
 	
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column(length = 8)
-	private String reservationNumber;
+	private Long reservationNumber;
 	
 
 	private LocalDateTime creationDate;
@@ -38,6 +39,8 @@ public class Reservation {
 	private Location dropOffLocation;
 	
 	private LocalDateTime returnDate;
+	
+	@Enumerated(EnumType.STRING)
 	private ReservationStatus status;
 	
 	@ManyToOne(fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST, CascadeType.MERGE})
@@ -55,8 +58,10 @@ public class Reservation {
         inverseJoinColumns = @JoinColumn(name = "extra_id")
     )
 	private ArrayList<ExtraService> extras;
-	
-	public Reservation(String reservationNumber, LocalDateTime pickUpDateTime, LocalDateTime dropOffDateTime,
+	public Reservation() {
+		
+	}
+	public Reservation(Long reservationNumber, LocalDateTime pickUpDateTime, LocalDateTime dropOffDateTime,
 			Member member, Car car, Location pickUpLocation, Location dropOffLocation, ArrayList<ExtraService> extras) {
 
 		this.reservationNumber = reservationNumber;
@@ -73,11 +78,11 @@ public class Reservation {
 		this.returnDate = null;
 	}
 
-	public String getReservationNumber() {
+	public Long getReservationNumber() {
 		return reservationNumber;
 	}
 
-	public void setReservationNumber(String reservationNumber) {
+	public void setReservationNumber(Long reservationNumber) {
 		this.reservationNumber = reservationNumber;
 	}
 

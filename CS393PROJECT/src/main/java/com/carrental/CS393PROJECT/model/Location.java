@@ -15,24 +15,27 @@ import jakarta.persistence.Table;
 public class Location {
 	@Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-	private int code;
+	private Long code;
+	
 	private String name;
 	
 	@OneToMany(mappedBy = "location") 
     private List<Car> cars;
-
+	public Location() {
+		
+	}
 	
-	public Location(int code, String name) {
+	public Location(Long code, String name) {
         this.code = code;
         this.name = name;
         
     }
 	
-	public int getCode() {
+	public Long getCode() {
 		return code;
 	}
 	
-	public void setCode(int code) {
+	public void setCode(Long code) {
 		this.code = code;
 	}
 	

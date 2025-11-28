@@ -8,5 +8,5 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface LocationRepository extends JpaRepository<Location, Long>{
-	Optional<Location> findByCode(String code);
+	Optional<Location> findByCode(Long code);
 }

@@ -11,15 +11,14 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface ReservationRepository extends JpaRepository<ReservationRepository, String>{
+public interface ReservationRepository extends JpaRepository<Reservation, Long>{
 
-	@Query("SELECT r FROM Reservation r " +
-	           "WHERE r.car.barcode = :carBarcode " +
-	           "AND r.status = 'ACTIVE' " +
-	           "AND (" +
-	           "  (r.pickupDate <= :dropoffDate AND r.dropoffDate >= :pickupDate)" +
-	           ")")
-	    List<Reservation> findOverlappingReservations(@Param("carBarcode") String carBarcode, 
-	                                                  @Param("pickupDate") LocalDateTime pickupDate, 
-	                                                  @Param("dropoffDate") LocalDateTime dropoffDate);
+	@Query("SELECT r FROM Reservation r WHERE r.car.barcode = :carBarcode " +
+	           "AND r.status = com.carrental.CS393PROJECT.model.ReservationStatus.ACTIVE " +
+	           "AND (r.pickUpDateTime <= :dropoffDate AND r.dropOffDateTime >= :pickupDate)")
+	    List<Reservation> findOverlappingReservations(
+	            @Param("carBarcode") String carBarcode,
+	            @Param("pickupDate") LocalDateTime pickupDate,   
+	            @Param("dropoffDate") LocalDateTime dropoffDate
+	    );
 }
