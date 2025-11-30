@@ -5,63 +5,57 @@ import java.util.ArrayList;
 import java.util.List;
 
 import jakarta.persistence.CascadeType;
-import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
 import jakarta.persistence.FetchType;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.JoinTable;
 import jakarta.persistence.ManyToMany;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
+
 @Entity
 @Table(name = "Reservations")
 public class Reservation {
-	
+
 	@Id
 	private String reservationNumber;
-	
+
 	private LocalDateTime creationDate;
 	private LocalDateTime pickUpDateTime;
 	private LocalDateTime dropOffDateTime;
-	
+
 	@ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "pickup_location_id")
+	@JoinColumn(name = "pickup_location_id")
 	private Location pickUpLocation;
-	
+
 	@ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "dropoff_location_id")
+	@JoinColumn(name = "dropoff_location_id")
 	private Location dropOffLocation;
-	
+
 	private LocalDateTime returnDate;
-	
+
 	@Enumerated(EnumType.STRING)
 	private ReservationStatus status;
-	
+
 	@ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.MERGE)
-    @JoinColumn(name = "member_id")
+	@JoinColumn(name = "member_id")
 	private Member member;
-	
+
 	@ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.MERGE)
-    @JoinColumn(name = "car_id")
+	@JoinColumn(name = "car_id")
 	private Car car;
-	
+
 	@ManyToMany(fetch = FetchType.LAZY)
-    @JoinTable(
-        name = "reservation_extras",
-        joinColumns = @JoinColumn(name = "reservation_id"),
-        inverseJoinColumns = @JoinColumn(name = "extra_id")
-    )
+	@JoinTable(name = "reservation_extras", joinColumns = @JoinColumn(name = "reservation_id"), inverseJoinColumns = @JoinColumn(name = "extra_id"))
 	private List<ExtraService> extras = new ArrayList<>();
-	
-	
+
 	public Reservation() {
-		
+
 	}
+
 	public Reservation(String reservationNumber, LocalDateTime pickUpDateTime, LocalDateTime dropOffDateTime,
 			Member member, Car car, Location pickUpLocation, Location dropOffLocation, ArrayList<ExtraService> extras) {
 
@@ -77,7 +71,7 @@ public class Reservation {
 		this.creationDate = LocalDateTime.now();
 		this.status = ReservationStatus.ACTIVE;
 		this.returnDate = null;
-		
+
 	}
 
 	public String getReservationNumber() {
@@ -135,29 +129,37 @@ public class Reservation {
 	public void setReturnDate(LocalDateTime returnDate) {
 		this.returnDate = returnDate;
 	}
+
 	public void setMember(Member member) {
 		this.member = member;
 	}
+
 	public void setCar(Car car) {
 		this.car = car;
 	}
+
 	public ReservationStatus getStatus() {
 		return status;
 	}
+
 	public void setStatus(ReservationStatus status) {
 		this.status = status;
 	}
+
 	public List<ExtraService> getExtras() {
 		return extras;
 	}
+
 	public void setExtras(List<ExtraService> extras) {
 		this.extras = extras;
 	}
+
 	public Member getMember() {
 		return member;
 	}
+
 	public Car getCar() {
 		return car;
 	}
-	
+
 }

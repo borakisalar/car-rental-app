@@ -10,18 +10,17 @@ import com.carrental.CS393PROJECT.repos.LocationRepository;
 @Service
 public class LocationService {
 	private final LocationRepository locationRepository;
-	
+
 	public LocationService(LocationRepository locationRepository) {
 		this.locationRepository = locationRepository;
 	}
-	
+
 	public Location saveLocation(Location location) {
 		return locationRepository.save(location);
 	}
-	
+
 	public List<Location> getAllLocations() {
 		return locationRepository.findAll();
 	}
-	
-	
+
 }

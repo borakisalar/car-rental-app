@@ -26,11 +26,12 @@ public interface ReservationRepository extends JpaRepository<Reservation, String
 
 	@Query("SELECT COUNT(r) > 0 FROM Reservation r " + "WHERE r.car.barcode = :barcode " + "AND r.status = 'ACTIVE' "
 			+ "AND ((:start BETWEEN r.pickUpDateTime AND r.dropOffDateTime) "
-			+ "OR (:end BETWEEN r.pickUpDateTime AND r.dropOffDateTime) " + "OR (r.pickUpDateTime BETWEEN :start AND :end))")
+			+ "OR (:end BETWEEN r.pickUpDateTime AND r.dropOffDateTime) "
+			+ "OR (r.pickUpDateTime BETWEEN :start AND :end))")
 	boolean isCarBookedInPeriod(@Param("barcode") String barcode, @Param("start") LocalDateTime start,
 			@Param("end") LocalDateTime end);
-	
+
 	Optional<Reservation> findByReservationNumber(String reservationNumber);
-	
+
 	boolean existsByCarBarcode(String barcode);
 }

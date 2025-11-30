@@ -22,9 +22,9 @@ public class CarServiceTest {
 
 	@Mock
 	private CarRepository carRepository;
-	
+
 	@Mock
-    private ReservationRepository reservationRepository;
+	private ReservationRepository reservationRepository;
 
 	@InjectMocks
 	private CarService carService;
@@ -88,52 +88,52 @@ public class CarServiceTest {
 			carService.getCarByBarcode("MISSING");
 		});
 	}
-	
+
 	@Test
-    void deleteCar_WhenCarExistsAndNotUsed_ShouldReturnTrue() {
-        String barcode = "12345";
-        Car car = new Car();
-        car.setBarcode(barcode);
+	void deleteCar_WhenCarExistsAndNotUsed_ShouldReturnTrue() {
+		String barcode = "12345";
+		Car car = new Car();
+		car.setBarcode(barcode);
 
-        when(carRepository.findById(barcode)).thenReturn(Optional.of(car));
-        when(reservationRepository.existsByCarBarcode(barcode)).thenReturn(false);
+		when(carRepository.findById(barcode)).thenReturn(Optional.of(car));
+		when(reservationRepository.existsByCarBarcode(barcode)).thenReturn(false);
 
-        boolean result = carService.deleteCar(barcode);
+		boolean result = carService.deleteCar(barcode);
 
-        assertTrue(result);
-        verify(carRepository, times(1)).delete(car);
-    }
+		assertTrue(result);
+		verify(carRepository, times(1)).delete(car);
+	}
 
-    @Test
-    void deleteCar_WhenCarIsUsedInReservation_ShouldThrowException() {
-        String barcode = "12345";
-        Car car = new Car();
-        car.setBarcode(barcode);
+	@Test
+	void deleteCar_WhenCarIsUsedInReservation_ShouldThrowException() {
+		String barcode = "12345";
+		Car car = new Car();
+		car.setBarcode(barcode);
 
-        when(carRepository.findById(barcode)).thenReturn(Optional.of(car));
-        when(reservationRepository.existsByCarBarcode(barcode)).thenReturn(true);
+		when(carRepository.findById(barcode)).thenReturn(Optional.of(car));
+		when(reservationRepository.existsByCarBarcode(barcode)).thenReturn(true);
 
-        RuntimeException exception = assertThrows(RuntimeException.class, () -> {
-            carService.deleteCar(barcode);
-        });
+		RuntimeException exception = assertThrows(RuntimeException.class, () -> {
+			carService.deleteCar(barcode);
+		});
 
-        assertEquals("Car cannot be deleted; it is used in a reservation.", exception.getMessage());
-        
-        verify(carRepository, never()).delete(any(Car.class));
-    }
+		assertEquals("Car cannot be deleted; it is used in a reservation.", exception.getMessage());
 
-    @Test
-    void deleteCar_WhenCarDoesNotExist_ShouldThrowException() {
-        String barcode = "99999";
+		verify(carRepository, never()).delete(any(Car.class));
+	}
 
-        when(carRepository.findById(barcode)).thenReturn(Optional.empty());
+	@Test
+	void deleteCar_WhenCarDoesNotExist_ShouldThrowException() {
+		String barcode = "99999";
 
-        RuntimeException exception = assertThrows(RuntimeException.class, () -> {
-            carService.deleteCar(barcode);
-        });
+		when(carRepository.findById(barcode)).thenReturn(Optional.empty());
 
-        assertEquals("Car not found with barcode: " + barcode, exception.getMessage());
-        
-        verify(reservationRepository, never()).existsByCarBarcode(anyString());
-    }
+		RuntimeException exception = assertThrows(RuntimeException.class, () -> {
+			carService.deleteCar(barcode);
+		});
+
+		assertEquals("Car not found with barcode: " + barcode, exception.getMessage());
+
+		verify(reservationRepository, never()).existsByCarBarcode(anyString());
+	}
 }

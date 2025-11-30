@@ -7,8 +7,7 @@ import org.springframework.stereotype.Repository;
 
 import com.carrental.CS393PROJECT.model.ExtraService;
 
-
 @Repository
-public interface ExtraServiceRepository extends JpaRepository<ExtraService, Long>{
+public interface ExtraServiceRepository extends JpaRepository<ExtraService, Long> {
 	Optional<ExtraService> findById(Long id);
 }

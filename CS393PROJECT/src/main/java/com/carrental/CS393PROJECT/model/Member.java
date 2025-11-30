@@ -1,11 +1,11 @@
 package com.carrental.CS393PROJECT.model;
 
-import jakarta.annotation.Generated;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
+
 @Entity
 @Table(name = "Members")
 public class Member {
@@ -14,22 +14,24 @@ public class Member {
 	private String email;
 	private String phone;
 	private String drivingLicenseNumber;
-	
+
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
+
 	public Member() {
-		
+
 	}
+
 	public Member(Long id, String name, String address, String email, String phone, String drivingLicenseNumber) {
-        this.id = id;
+		this.id = id;
 		this.name = name;
-        this.address = address;
-        this.email = email;
-        this.phone = phone;
-        this.drivingLicenseNumber = drivingLicenseNumber;
-    }
-	
+		this.address = address;
+		this.email = email;
+		this.phone = phone;
+		this.drivingLicenseNumber = drivingLicenseNumber;
+	}
+
 	public Long getId() {
 		return id;
 	}
@@ -37,39 +39,39 @@ public class Member {
 	public String getName() {
 		return name;
 	}
-	
+
 	public void setName(String name) {
 		this.name = name;
 	}
-	
+
 	public String getAddress() {
 		return address;
 	}
-	
+
 	public void setAddress(String address) {
 		this.address = address;
 	}
-	
+
 	public String getEmail() {
 		return email;
 	}
-	
+
 	public void setEmail(String email) {
 		this.email = email;
 	}
-	
+
 	public String getPhone() {
 		return phone;
 	}
-	
+
 	public void setPhone(String phone) {
 		this.phone = phone;
 	}
-	
+
 	public String getDrivingLicenseNumber() {
 		return drivingLicenseNumber;
 	}
-	
+
 	public void setDrivingLicenseNumber(String drivingLicenseNumber) {
 		this.drivingLicenseNumber = drivingLicenseNumber;
 	}
