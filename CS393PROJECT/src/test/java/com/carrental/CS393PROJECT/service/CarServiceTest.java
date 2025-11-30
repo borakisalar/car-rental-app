@@ -15,12 +15,16 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import com.carrental.CS393PROJECT.model.Car;
 import com.carrental.CS393PROJECT.repos.CarRepository;
+import com.carrental.CS393PROJECT.repos.ReservationRepository;
 
 @ExtendWith(MockitoExtension.class)
 public class CarServiceTest {
 
 	@Mock
 	private CarRepository carRepository;
+	
+	@Mock
+    private ReservationRepository reservationRepository;
 
 	@InjectMocks
 	private CarService carService;
@@ -84,4 +88,52 @@ public class CarServiceTest {
 			carService.getCarByBarcode("MISSING");
 		});
 	}
+	
+	@Test
+    void deleteCar_WhenCarExistsAndNotUsed_ShouldReturnTrue() {
+        String barcode = "12345";
+        Car car = new Car();
+        car.setBarcode(barcode);
+
+        when(carRepository.findById(barcode)).thenReturn(Optional.of(car));
+        when(reservationRepository.existsByCarBarcode(barcode)).thenReturn(false);
+
+        boolean result = carService.deleteCar(barcode);
+
+        assertTrue(result);
+        verify(carRepository, times(1)).delete(car);
+    }
+
+    @Test
+    void deleteCar_WhenCarIsUsedInReservation_ShouldThrowException() {
+        String barcode = "12345";
+        Car car = new Car();
+        car.setBarcode(barcode);
+
+        when(carRepository.findById(barcode)).thenReturn(Optional.of(car));
+        when(reservationRepository.existsByCarBarcode(barcode)).thenReturn(true);
+
+        RuntimeException exception = assertThrows(RuntimeException.class, () -> {
+            carService.deleteCar(barcode);
+        });
+
+        assertEquals("Car cannot be deleted; it is used in a reservation.", exception.getMessage());
+        
+        verify(carRepository, never()).delete(any(Car.class));
+    }
+
+    @Test
+    void deleteCar_WhenCarDoesNotExist_ShouldThrowException() {
+        String barcode = "99999";
+
+        when(carRepository.findById(barcode)).thenReturn(Optional.empty());
+
+        RuntimeException exception = assertThrows(RuntimeException.class, () -> {
+            carService.deleteCar(barcode);
+        });
+
+        assertEquals("Car not found with barcode: " + barcode, exception.getMessage());
+        
+        verify(reservationRepository, never()).existsByCarBarcode(anyString());
+    }
 }

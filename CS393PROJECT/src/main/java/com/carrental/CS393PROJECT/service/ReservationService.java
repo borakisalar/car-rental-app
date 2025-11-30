@@ -46,18 +46,18 @@ public class ReservationService {
 		return String.valueOf(number);
 	}
 
-	public Reservation makeReservation(String barcode, LocalDateTime pickupDate, LocalDateTime dropoffDate) {
+	public Reservation makeReservation(String barcode, LocalDateTime pickupDateTime, LocalDateTime dropOffDateTime) {
 
 		Car car = carRepository.findById(barcode).orElseThrow(() -> new RuntimeException("Car not found"));
 
-		if (reservationRepository.isCarBookedInPeriod(barcode, pickupDate, dropoffDate)) {
+		if (reservationRepository.isCarBookedInPeriod(barcode, pickupDateTime, dropOffDateTime)) {
 			throw new RuntimeException("Car is already booked for these dates.");
 		}
 
 		Reservation reservation = new Reservation();
 		reservation.setCar(car);
-		reservation.setPickUpDateTime(pickupDate);
-		reservation.setDropOffDateTime(dropoffDate);
+		reservation.setPickUpDateTime(pickupDateTime);
+		reservation.setDropOffDateTime(dropOffDateTime);
 		reservation.setCreationDate(LocalDateTime.now());
 		reservation.setStatus(ReservationStatus.ACTIVE);
 

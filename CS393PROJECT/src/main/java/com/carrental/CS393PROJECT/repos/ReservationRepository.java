@@ -16,17 +16,17 @@ public interface ReservationRepository extends JpaRepository<Reservation, String
 
 	@Query("SELECT r FROM Reservation r WHERE r.car.barcode = :carBarcode "
 			+ "AND r.status = com.carrental.CS393PROJECT.model.ReservationStatus.ACTIVE "
-			+ "AND (r.pickUpDateTime <= :dropoffDate AND r.dropOffDateTime >= :pickupDate)")
+			+ "AND (r.pickUpDateTime <= :dropOffDateTime AND r.dropOffDateTime >= :pickUpDateTime)")
 	List<Reservation> findOverlappingReservations(@Param("carBarcode") String carBarcode,
-			@Param("pickupDate") LocalDateTime pickupDate, @Param("dropoffDate") LocalDateTime dropoffDate);
+			@Param("pickUpDateTime") LocalDateTime pickupDate, @Param("dropOffDateTime") LocalDateTime dropoffDate);
 
 	@Query("SELECT r FROM Reservation r " + "WHERE r.status = 'ACTIVE' "
-			+ "AND :now BETWEEN r.pickupDate AND r.dropoffDate")
+			+ "AND :now BETWEEN r.pickUpDateTime AND r.dropOffDateTime")
 	List<Reservation> findCurrentlyRentedCars(@Param("now") LocalDateTime now);
 
 	@Query("SELECT COUNT(r) > 0 FROM Reservation r " + "WHERE r.car.barcode = :barcode " + "AND r.status = 'ACTIVE' "
-			+ "AND ((:start BETWEEN r.pickupDate AND r.dropoffDate) "
-			+ "OR (:end BETWEEN r.pickupDate AND r.dropoffDate) " + "OR (r.pickupDate BETWEEN :start AND :end))")
+			+ "AND ((:start BETWEEN r.pickUpDateTime AND r.dropOffDateTime) "
+			+ "OR (:end BETWEEN r.pickUpDateTime AND r.dropOffDateTime) " + "OR (r.pickUpDateTime BETWEEN :start AND :end))")
 	boolean isCarBookedInPeriod(@Param("barcode") String barcode, @Param("start") LocalDateTime start,
 			@Param("end") LocalDateTime end);
 	
