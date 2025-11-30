@@ -11,7 +11,7 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface ReservationRepository extends JpaRepository<Reservation, Long>{
+public interface ReservationRepository extends JpaRepository<Reservation, String>{
 
 	@Query("SELECT r FROM Reservation r WHERE r.car.barcode = :carBarcode " +
 	           "AND r.status = com.carrental.CS393PROJECT.model.ReservationStatus.ACTIVE " +

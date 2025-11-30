@@ -26,7 +26,7 @@ public class Car {
 	private double mileage;
 	
 	private double dailyPrice;
-	private String category;
+	private CarCategory category;
 	public Car() {
 		
 	}
@@ -43,7 +43,7 @@ public class Car {
 	
 	
 	public Car(String barcode, String licensePlateNumber, int numberOfSeats, String brand, String model,
-			TransmissionType transmissionType, double dailyPrice, String category, Location location) {
+			TransmissionType transmissionType, double dailyPrice, CarCategory category, Location location) {
 
 		this.barcode = barcode;
 		this.licensePlateNumber = licensePlateNumber;
@@ -117,11 +117,11 @@ public class Car {
 		this.dailyPrice = dailyPrice;
 	}
 	
-	public String getCategory() {
+	public CarCategory getCategory() {
 		return category;
 	}
 	
-	public void setCategory(String category) {
+	public void setCategory(CarCategory category) {
 		this.category = category;
 	}
 	
@@ -132,4 +132,25 @@ public class Car {
 	public void setLocation(Location location) {
 		this.location = location;
 	}
+
+
+	public CarStatus getStatus() {
+		return status;
+	}
+
+
+	public void setStatus(CarStatus status) {
+		this.status = status;
+	}
+
+
+	public TransmissionType getTransmissionType() {
+		return transmissionType;
+	}
+
+
+	public void setTransmissionType(TransmissionType transmissionType) {
+		this.transmissionType = transmissionType;
+	}
+
 }

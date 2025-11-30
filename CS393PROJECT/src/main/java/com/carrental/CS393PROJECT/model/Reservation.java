@@ -2,6 +2,7 @@ package com.carrental.CS393PROJECT.model;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.List;
 
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
@@ -22,10 +23,8 @@ import jakarta.persistence.Table;
 public class Reservation {
 	
 	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Long reservationNumber;
+	private String reservationNumber;
 	
-
 	private LocalDateTime creationDate;
 	private LocalDateTime pickUpDateTime;
 	private LocalDateTime dropOffDateTime;
@@ -43,11 +42,11 @@ public class Reservation {
 	@Enumerated(EnumType.STRING)
 	private ReservationStatus status;
 	
-	@ManyToOne(fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+	@ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.MERGE)
     @JoinColumn(name = "member_id")
 	private Member member;
 	
-	@ManyToOne(fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+	@ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.MERGE)
     @JoinColumn(name = "car_id")
 	private Car car;
 	
@@ -57,11 +56,13 @@ public class Reservation {
         joinColumns = @JoinColumn(name = "reservation_id"),
         inverseJoinColumns = @JoinColumn(name = "extra_id")
     )
-	private ArrayList<ExtraService> extras;
+	private List<ExtraService> extras = new ArrayList<>();
+	
+	
 	public Reservation() {
 		
 	}
-	public Reservation(Long reservationNumber, LocalDateTime pickUpDateTime, LocalDateTime dropOffDateTime,
+	public Reservation(String reservationNumber, LocalDateTime pickUpDateTime, LocalDateTime dropOffDateTime,
 			Member member, Car car, Location pickUpLocation, Location dropOffLocation, ArrayList<ExtraService> extras) {
 
 		this.reservationNumber = reservationNumber;
@@ -76,13 +77,14 @@ public class Reservation {
 		this.creationDate = LocalDateTime.now();
 		this.status = ReservationStatus.ACTIVE;
 		this.returnDate = null;
+		
 	}
 
-	public Long getReservationNumber() {
+	public String getReservationNumber() {
 		return reservationNumber;
 	}
 
-	public void setReservationNumber(Long reservationNumber) {
+	public void setReservationNumber(String reservationNumber) {
 		this.reservationNumber = reservationNumber;
 	}
 
@@ -133,4 +135,29 @@ public class Reservation {
 	public void setReturnDate(LocalDateTime returnDate) {
 		this.returnDate = returnDate;
 	}
+	public void setMember(Member member) {
+		this.member = member;
+	}
+	public void setCar(Car car) {
+		this.car = car;
+	}
+	public ReservationStatus getStatus() {
+		return status;
+	}
+	public void setStatus(ReservationStatus status) {
+		this.status = status;
+	}
+	public List<ExtraService> getExtras() {
+		return extras;
+	}
+	public void setExtras(List<ExtraService> extras) {
+		this.extras = extras;
+	}
+	public Member getMember() {
+		return member;
+	}
+	public Car getCar() {
+		return car;
+	}
+	
 }

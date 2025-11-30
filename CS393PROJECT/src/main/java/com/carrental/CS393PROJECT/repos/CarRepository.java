@@ -9,14 +9,16 @@ import org.springframework.stereotype.Repository;
 
 import com.carrental.CS393PROJECT.model.Car;
 import com.carrental.CS393PROJECT.model.CarStatus;
+import com.carrental.CS393PROJECT.model.Location;
+import com.carrental.CS393PROJECT.model.TransmissionType;
 
 @Repository
 public interface CarRepository extends JpaRepository<Car, String>{
 
 	List<Car> findByStatus(CarStatus status);
 	
-	List<Car> findByLocation(CarStatus status);
+	List<Car> findByLocation(Location location);
 	
-	@Query(value = "SELECT * FROM cars WHERE status = 'AVAILABLE' AND transmission_type = :transmission", nativeQuery = true)
-    List<Car> findAvailableByTransmission(@Param("transmission") String transmissionType);
+	@Query("SELECT c FROM Car c WHERE c.status = 'AVAILABLE' AND c.transmissionType = :transmission")
+    List<Car> findAvailableByTransmission(@Param("transmission") TransmissionType transmissionType);
 }
