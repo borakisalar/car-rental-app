@@ -1,5 +1,7 @@
 package com.carrental.CS393PROJECT.service;
 
+import java.util.List;
+
 import org.springframework.stereotype.Service;
 
 import com.carrental.CS393PROJECT.model.ExtraService;
@@ -16,5 +18,10 @@ public class ExtraServiceService {
 	public ExtraService saveExtraService(ExtraService extraService) {
 		return extraServiceRepository.save(extraService);
 	}
+	
+	public List<ExtraService> getAllExtraServices() {
+		return extraServiceRepository.findAll();
+	}
+	
 	
 }
