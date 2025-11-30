@@ -139,6 +139,7 @@ public class DataInitializer implements CommandLineRunner {
 
         Reservation res1 = new Reservation();
 
+        res1.setReservationNumber("12345678");
         res1.setCreationDate(LocalDateTime.now());
         res1.setPickUpDateTime(LocalDateTime.now().plusDays(1));
         res1.setDropOffDateTime(LocalDateTime.now().plusDays(3));
@@ -155,6 +156,7 @@ public class DataInitializer implements CommandLineRunner {
         
         Reservation res2 = new Reservation();
         
+        res2.setReservationNumber("87654321");
         res2.setCreationDate(LocalDateTime.now().minusDays(10));
         res2.setPickUpDateTime(LocalDateTime.now().minusDays(8));
         res2.setDropOffDateTime(LocalDateTime.now().minusDays(5));
