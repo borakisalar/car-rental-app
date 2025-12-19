@@ -26,7 +26,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 
 @RestController
-@RequestMapping("/api/cars")
+@RequestMapping("/cars")
 public class CarController {
 	private final CarService carService;
 
@@ -39,12 +39,12 @@ public class CarController {
 			@ApiResponse(responseCode = "200", description = "Available cars found", content = @Content(schema = @Schema(implementation = CarDTO.class))),
 			@ApiResponse(responseCode = "404", description = "No available cars found", content = @Content) })
 	@GetMapping("/search")
-	public List<CarDTO> searchCars(@RequestParam(required = false) CarCategory category,
-			@RequestParam(required = false) TransmissionType transmission,
-			@RequestParam(required = false) Double minPrice, @RequestParam(required = false) Double maxPrice,
-			@RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime start,
-			@RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime end,
-			@RequestParam(required = false) Integer seats, @RequestParam Long pickupLocCode,
+	public List<CarDTO> searchCars(@RequestParam(name = "category", required = false) CarCategory category,
+			@RequestParam(name = "transmission", required = false) TransmissionType transmission,
+			@RequestParam(name = "minPrice", required = false) Double minPrice, @RequestParam(name = "maxPrice", required = false) Double maxPrice,
+			@RequestParam(name = "start") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime start,
+			@RequestParam(name = "end") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime end,
+			@RequestParam(name = "seats", required = false) Integer seats, @RequestParam(name = "pickupLocCode") Long pickupLocCode,
 			HttpServletResponse response) {
 
 		List<CarDTO> cars = carService.searchAvailableCars(category, transmission, minPrice, maxPrice, start, end,

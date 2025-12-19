@@ -27,7 +27,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 
 @RestController
-@RequestMapping("/api/reservations")
+@RequestMapping("/reservations")
 public class ReservationController {
 
 	private final ReservationService reservationService;
@@ -98,7 +98,7 @@ public class ReservationController {
 			@ApiResponse(responseCode = "404", description = "Reservation or Car not found", content = @Content),
 			@ApiResponse(responseCode = "500", description = "Internal Server Error", content = @Content) })
 	@PutMapping("/{resNum}/return")
-	public Boolean returnCar(@PathVariable String resNum, HttpServletResponse response) {
+	public Boolean returnCar(@PathVariable("resNum") String resNum, HttpServletResponse response) {
 		try {
 			boolean result = reservationService.returnCar(resNum);
 			response.setStatus(HttpStatus.OK.value());
@@ -118,7 +118,7 @@ public class ReservationController {
 			@ApiResponse(responseCode = "404", description = "Reservation number not found", content = @Content),
 			@ApiResponse(responseCode = "500", description = "Internal Server Error", content = @Content) })
 	@PutMapping("/{resNum}/cancel")
-	public Boolean cancelReservation(@PathVariable String resNum, HttpServletResponse response) {
+	public Boolean cancelReservation(@PathVariable("resNum") String resNum, HttpServletResponse response) {
 		try {
 			boolean result = reservationService.cancelReservation(resNum);
 			response.setStatus(HttpStatus.OK.value());

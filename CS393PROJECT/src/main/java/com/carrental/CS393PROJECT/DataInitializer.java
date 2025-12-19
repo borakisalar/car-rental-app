@@ -57,7 +57,7 @@ public class DataInitializer implements CommandLineRunner {
 		car1.setMileage(15000);
 		car1.setTransmissionType(TransmissionType.AUTOMATIC);
 		car1.setCategory(CarCategory.COMPACT_CAR);
-		car1.setStatus(CarStatus.AVAILABLE);
+		car1.setStatus(CarStatus.BEING_SERVICED);
 		car1.setDailyPrice(1500.0);
 		car1.setLocation(loc1);
 		carService.registerCar(car1);
@@ -85,7 +85,7 @@ public class DataInitializer implements CommandLineRunner {
 		car3.setMileage(90000);
 		car3.setTransmissionType(TransmissionType.MANUAL);
 		car3.setCategory(CarCategory.MINIVAN);
-		car3.setStatus(CarStatus.BEING_SERVICED);
+		car3.setStatus(CarStatus.AVAILABLE);
 		car3.setDailyPrice(2200.0);
 		car3.setLocation(loc2);
 		carService.registerCar(car3);
@@ -138,7 +138,7 @@ public class DataInitializer implements CommandLineRunner {
 
 		res1.setReservationNumber("12345678");
 		res1.setCreationDate(LocalDateTime.now());
-		res1.setPickUpDateTime(LocalDateTime.now().plusDays(1));
+		res1.setPickUpDateTime(LocalDateTime.now().minusDays(1));
 		res1.setDropOffDateTime(LocalDateTime.now().plusDays(3));
 		res1.setPickUpLocation(loc1);
 		res1.setDropOffLocation(loc1);
