@@ -67,7 +67,7 @@ public class ReservationServiceTest {
 		assertTrue(result);
 	}
 
-	void makeReservation_Success() {
+	/*void makeReservation_Success() {
 		Car car = new Car();
 		car.setBarcode("EXAMPLEBARCODE");
 		car.setStatus(CarStatus.AVAILABLE);
@@ -85,7 +85,7 @@ public class ReservationServiceTest {
 		assertNotNull(res.getReservationNumber());
 		assertEquals("EXAMPLEBARCODE", res.getCar().getBarcode());
 		assertEquals(ReservationStatus.ACTIVE, res.getStatus());
-	}
+	}*/
 
 	@Test
 	void addExtraToReservation_Success() {
@@ -95,7 +95,7 @@ public class ReservationServiceTest {
 		reservationService.saveReservation(res);
 
 		ExtraService extra = new ExtraService();
-		extra.setName("GPS");
+		extra.setName("Cooling Seat");
 		extra.setPrice(100.0);
 		extraServiceRepository.save(extra);
 
