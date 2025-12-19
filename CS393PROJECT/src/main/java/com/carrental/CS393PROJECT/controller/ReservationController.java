@@ -52,6 +52,7 @@ public class ReservationController {
 			response.setStatus(HttpStatus.NOT_ACCEPTABLE.value());
 			return null;
 		} catch (Exception e) {
+			e.printStackTrace();
 			response.setStatus(HttpStatus.INTERNAL_SERVER_ERROR.value());
 			return null;
 		}
@@ -78,7 +79,7 @@ public class ReservationController {
 			@ApiResponse(responseCode = "404", description = "Reservation Extra not found", content = @Content),
 			@ApiResponse(responseCode = "500", description = "Internal Server Error", content = @Content) })
 	@PostMapping("/{resNum}/extras")
-	public Boolean addExtra(@PathVariable String resNum, @RequestParam Long extraCode, HttpServletResponse response) {
+	public Boolean addExtra(@PathVariable("resNum") String resNum, @RequestParam("extraCode") Long extraCode, HttpServletResponse response) {
 		try {
 			boolean result = reservationService.addExtraToReservation(resNum, extraCode);
 			response.setStatus(HttpStatus.OK.value());
