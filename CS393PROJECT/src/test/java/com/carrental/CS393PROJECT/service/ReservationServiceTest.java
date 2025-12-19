@@ -10,14 +10,21 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.carrental.CS393PROJECT.dto.ReservationRequestDTO;
+import com.carrental.CS393PROJECT.dto.ReservationResponseDTO;
 import com.carrental.CS393PROJECT.model.Car;
+import com.carrental.CS393PROJECT.model.CarCategory;
 import com.carrental.CS393PROJECT.model.CarStatus;
 import com.carrental.CS393PROJECT.model.ExtraService;
+import com.carrental.CS393PROJECT.model.Location;
+import com.carrental.CS393PROJECT.model.Member;
 import com.carrental.CS393PROJECT.model.Reservation;
 import com.carrental.CS393PROJECT.model.ReservationStatus;
 import com.carrental.CS393PROJECT.model.TransmissionType;
 import com.carrental.CS393PROJECT.repos.CarRepository;
 import com.carrental.CS393PROJECT.repos.ExtraServiceRepository;
+import com.carrental.CS393PROJECT.repos.LocationRepository;
+import com.carrental.CS393PROJECT.repos.MemberRepository;
 
 @SpringBootTest
 @Transactional
@@ -31,6 +38,12 @@ public class ReservationServiceTest {
 
 	@Autowired
 	private ExtraServiceRepository extraServiceRepository;
+
+	@Autowired
+	private LocationRepository locationRepository;
+
+	@Autowired
+	private MemberRepository memberRepository;
 
 	@Test
 	void saveReservation_Success() {
@@ -67,25 +80,39 @@ public class ReservationServiceTest {
 		assertTrue(result);
 	}
 
-	/*void makeReservation_Success() {
-		Car car = new Car();
-		car.setBarcode("EXAMPLEBARCODE");
+	@Test
+	public void testMakeReservation_Success() {
+		Location pickupLoc = new Location(null, "Istanbul Airport");
+		Location dropoffLoc = new Location(null, "City Center");
+		pickupLoc = locationRepository.save(pickupLoc);
+		dropoffLoc = locationRepository.save(dropoffLoc);
+
+		Member member = new Member(null, "Arda Ayas", "Mardin", "ardaayas@example.com", "555-1234", "DL12345");
+		member = memberRepository.save(member);
+
+		Car car = new Car("CAR123", "34AB123", 5, "Toyota", "Corolla", TransmissionType.AUTOMATIC, 100.0,
+				CarCategory.MIDSIZE_CAR, pickupLoc);
 		car.setStatus(CarStatus.AVAILABLE);
-		car.setBrand("TestBrand");
-		car.setModel("TestModel");
-		car.setLicensePlateNumber("34EXP1234");
-		car.setNumberOfSeats(5);
-		car.setTransmissionType(TransmissionType.AUTOMATIC);
 		carRepository.save(car);
 
-		Reservation res = reservationService.makeReservation("EXAMPLEBARCODE", LocalDateTime.now().plusDays(1),
-				LocalDateTime.now().plusDays(3));
+		ReservationRequestDTO request = new ReservationRequestDTO();
+		request.setCarBarcode("CAR123");
+		request.setMemberId(member.getId());
+		request.setPickUpLocationCode(pickupLoc.getCode());
+		request.setDropOffLocationCode(dropoffLoc.getCode());
+		request.setPickUpDateTime(LocalDateTime.now().plusDays(1));
+		request.setDropOffDateTime(LocalDateTime.now().plusDays(3));
+		request.setExtraIds(null);
 
-		assertNotNull(res);
-		assertNotNull(res.getReservationNumber());
-		assertEquals("EXAMPLEBARCODE", res.getCar().getBarcode());
-		assertEquals(ReservationStatus.ACTIVE, res.getStatus());
-	}*/
+		ReservationResponseDTO response = reservationService.makeReservation(request);
+
+		assertNotNull(response);
+		assertNotNull(response.getReservationNumber());
+		assertTrue(response.getReservationNumber().length() == 8);
+		assertEquals(member.getId(), response.getMemberId());
+		assertEquals(pickupLoc.getName(), response.getPickUpLocationName());
+		assertEquals(200.0, response.getTotalAmount(), 0.01);
+	}
 
 	@Test
 	void addExtraToReservation_Success() {

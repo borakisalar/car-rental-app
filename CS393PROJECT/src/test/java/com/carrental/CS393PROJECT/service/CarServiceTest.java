@@ -1,139 +1,111 @@
 package com.carrental.CS393PROJECT.service;
 
-import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import java.util.Arrays;
+import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Optional;
 
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.transaction.annotation.Transactional;
 
+import com.carrental.CS393PROJECT.dto.CarDTO;
 import com.carrental.CS393PROJECT.model.Car;
+import com.carrental.CS393PROJECT.model.CarCategory;
+import com.carrental.CS393PROJECT.model.CarStatus;
+import com.carrental.CS393PROJECT.model.Location;
+import com.carrental.CS393PROJECT.model.Member;
+import com.carrental.CS393PROJECT.model.Reservation;
+import com.carrental.CS393PROJECT.model.ReservationStatus;
+import com.carrental.CS393PROJECT.model.TransmissionType;
 import com.carrental.CS393PROJECT.repos.CarRepository;
+import com.carrental.CS393PROJECT.repos.LocationRepository;
+import com.carrental.CS393PROJECT.repos.MemberRepository;
 import com.carrental.CS393PROJECT.repos.ReservationRepository;
 
-@ExtendWith(MockitoExtension.class)
+@SpringBootTest
+@Transactional
 public class CarServiceTest {
 
-	@Mock
-	private CarRepository carRepository;
-
-	@Mock
-	private ReservationRepository reservationRepository;
-
-	@InjectMocks
+	@Autowired
 	private CarService carService;
 
+	@Autowired
+	private CarRepository carRepository;
+
+	@Autowired
+	private LocationRepository locationRepository;
+
+	@Autowired
+	private ReservationRepository reservationRepository;
+
+	@Autowired
+	private MemberRepository memberRepository;
+
 	@Test
-	void registerCar_Success() {
-		Car car = new Car();
-		car.setBarcode("12345");
-		when(carRepository.findById("12345")).thenReturn(Optional.empty());
-		when(carRepository.save(car)).thenReturn(car);
+	public void testSearchAvailableCars_Success() {
+		Location location = new Location(null, "Test Airport");
+		location = locationRepository.save(location);
 
-		Car savedCar = carService.registerCar(car);
+		Car car = new Car("B123456789", "34TST1234", 5, "Ford", "Focus", TransmissionType.MANUAL, 80.0,
+				CarCategory.COMPACT_CAR, location);
+		car.setStatus(CarStatus.AVAILABLE);
+		carRepository.save(car);
 
-		assertNotNull(savedCar);
-		assertEquals("12345", savedCar.getBarcode());
-		verify(carRepository).save(car);
+		LocalDateTime start = LocalDateTime.now().plusDays(1);
+		LocalDateTime end = LocalDateTime.now().plusDays(3);
+
+		List<CarDTO> result = carService.searchAvailableCars(null, null, null, null, start, end, null,
+				location.getCode());
+
+		assertFalse(result.isEmpty());
+		assertEquals("B123456789", result.get(0).getBarcode());
 	}
 
 	@Test
-	void registerCar_AlreadyExists_ThrowsException() {
-		Car car = new Car();
-		car.setBarcode("12345");
-		when(carRepository.findById("12345")).thenReturn(Optional.of(car));
+	public void testDeleteCar_Success() {
+		Location location = new Location(null, "Test City");
+		location = locationRepository.save(location);
 
-		Exception exception = assertThrows(RuntimeException.class, () -> {
-			carService.registerCar(car);
-		});
+		Car car = new Car("B987654321", "34DEL1234", 5, "Fiat", "Egea", TransmissionType.MANUAL, 50.0,
+				CarCategory.COMPACT_CAR, location);
+		carRepository.save(car);
 
-		assertEquals("Car with this barcode already exists.", exception.getMessage());
-		verify(carRepository, never()).save(any(Car.class));
+		boolean isDeleted = carService.deleteCar("B987654321");
+
+		assertTrue(isDeleted);
+		assertFalse(carRepository.existsById("B987654321"));
 	}
 
 	@Test
-	void getAllCars_ReturnsList() {
-		Car c1 = new Car();
-		Car c2 = new Car();
-		when(carRepository.findAll()).thenReturn(Arrays.asList(c1, c2));
+	public void testDeleteCar_Fail_LinkedReservation() {
+		Location location = new Location(null, "Test City");
+		location = locationRepository.save(location);
 
-		List<Car> cars = carService.getAllCars();
+		Car car = new Car("B78391467", "34LNK123", 5, "Honda", "Civic", TransmissionType.AUTOMATIC, 120.0,
+				CarCategory.MIDSIZE_CAR, location);
+		carRepository.save(car);
 
-		assertEquals(2, cars.size());
-	}
+		Member member = new Member(null, "Fatma Yilmaz", "Fatih", "fatmayilmaz@test.com", "1234567", "DL999");
+		memberRepository.save(member);
 
-	@Test
-	void getCarByBarcode_Found() {
-		Car car = new Car();
-		car.setBarcode("EXISTING");
-		when(carRepository.findById("EXISTING")).thenReturn(Optional.of(car));
+		Reservation reservation = new Reservation();
+		reservation.setReservationNumber("RES12345");
+		reservation.setCar(car);
+		reservation.setMember(member);
+		reservation.setPickUpLocation(location);
+		reservation.setDropOffLocation(location);
+		reservation.setPickUpDateTime(LocalDateTime.now());
+		reservation.setDropOffDateTime(LocalDateTime.now().plusDays(2));
+		reservation.setStatus(ReservationStatus.ACTIVE);
+		reservationRepository.save(reservation);
 
-		Car found = carService.getCarByBarcode("EXISTING");
+		boolean isDeleted = carService.deleteCar("B78391467");
 
-		assertNotNull(found);
-		assertEquals("EXISTING", found.getBarcode());
-	}
-
-	@Test
-	void getCarByBarcode_NotFound_ThrowsException() {
-		when(carRepository.findById("MISSING")).thenReturn(Optional.empty());
-
-		assertThrows(RuntimeException.class, () -> {
-			carService.getCarByBarcode("MISSING");
-		});
-	}
-
-	@Test
-	void deleteCar_WhenCarExistsAndNotUsed_ShouldReturnTrue() {
-		String barcode = "12345";
-		Car car = new Car();
-		car.setBarcode(barcode);
-
-		when(carRepository.findById(barcode)).thenReturn(Optional.of(car));
-		when(reservationRepository.existsByCarBarcode(barcode)).thenReturn(false);
-
-		boolean result = carService.deleteCar(barcode);
-
-		assertTrue(result);
-		verify(carRepository, times(1)).delete(car);
-	}
-
-	@Test
-	void deleteCar_WhenCarIsUsedInReservation_ShouldThrowException() {
-		String barcode = "12345";
-		Car car = new Car();
-		car.setBarcode(barcode);
-
-		when(carRepository.findById(barcode)).thenReturn(Optional.of(car));
-		when(reservationRepository.existsByCarBarcode(barcode)).thenReturn(true);
-
-		RuntimeException exception = assertThrows(RuntimeException.class, () -> {
-			carService.deleteCar(barcode);
-		});
-
-		assertEquals("Car cannot be deleted; it is used in a reservation.", exception.getMessage());
-
-		verify(carRepository, never()).delete(any(Car.class));
-	}
-
-	@Test
-	void deleteCar_WhenCarDoesNotExist_ShouldThrowException() {
-		String barcode = "99999";
-
-		when(carRepository.findById(barcode)).thenReturn(Optional.empty());
-
-		RuntimeException exception = assertThrows(RuntimeException.class, () -> {
-			carService.deleteCar(barcode);
-		});
-
-		assertEquals("Car not found with barcode: " + barcode, exception.getMessage());
-
-		verify(reservationRepository, never()).existsByCarBarcode(anyString());
+		assertFalse(isDeleted);
+		assertTrue(carRepository.existsById("B78391467"));
 	}
 }

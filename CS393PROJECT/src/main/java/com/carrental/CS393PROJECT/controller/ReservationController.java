@@ -2,8 +2,9 @@ package com.carrental.CS393PROJECT.controller;
 
 import java.util.List;
 
+import jakarta.servlet.http.HttpServletResponse;
+
 import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -41,14 +42,18 @@ public class ReservationController {
 			@ApiResponse(responseCode = "406", description = "Car is not available", content = @Content),
 			@ApiResponse(responseCode = "500", description = "Internal Server Error", content = @Content) })
 	@PostMapping
-	public ResponseEntity<ReservationResponseDTO> makeReservation(@RequestBody ReservationRequestDTO request) {
+	public ReservationResponseDTO makeReservation(@RequestBody ReservationRequestDTO request,
+			HttpServletResponse response) {
 		try {
-			ReservationResponseDTO response = reservationService.makeReservation(request);
-			return ResponseEntity.ok(response);
+			ReservationResponseDTO dto = reservationService.makeReservation(request);
+			response.setStatus(HttpStatus.OK.value());
+			return dto;
 		} catch (IllegalStateException e) {
-			return ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).build();
+			response.setStatus(HttpStatus.NOT_ACCEPTABLE.value());
+			return null;
 		} catch (Exception e) {
-			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+			response.setStatus(HttpStatus.INTERNAL_SERVER_ERROR.value());
+			return null;
 		}
 	}
 
@@ -57,62 +62,73 @@ public class ReservationController {
 			@ApiResponse(responseCode = "200", description = "OK", content = @Content(schema = @Schema(implementation = RentedCarDTO.class))),
 			@ApiResponse(responseCode = "404", description = "No rented cars found", content = @Content) })
 	@GetMapping("/rented")
-	public ResponseEntity<List<RentedCarDTO>> getAllRentedCars() {
+	public List<RentedCarDTO> getAllRentedCars(HttpServletResponse response) {
 		List<RentedCarDTO> cars = reservationService.getAllRentedCars();
 		if (cars.isEmpty()) {
-			return ResponseEntity.notFound().build();
+			response.setStatus(HttpStatus.NOT_FOUND.value());
+			return null;
 		}
-		return ResponseEntity.ok(cars);
+		response.setStatus(HttpStatus.OK.value());
+		return cars;
 	}
 
 	@Operation(summary = "Add an extra to a reservation", description = "Adds an extra service to an existing reservation")
 	@ApiResponses(value = {
 			@ApiResponse(responseCode = "200", description = "Extra added successfully", content = @Content(schema = @Schema(implementation = Boolean.class))),
-			@ApiResponse(responseCode = "404", description = "Reservation or Extra not found", content = @Content),
+			@ApiResponse(responseCode = "404", description = "Reservation Extra not found", content = @Content),
 			@ApiResponse(responseCode = "500", description = "Internal Server Error", content = @Content) })
 	@PostMapping("/{resNum}/extras")
-	public ResponseEntity<Boolean> addExtra(@PathVariable String resNum, @RequestParam Long extraCode) {
+	public Boolean addExtra(@PathVariable String resNum, @RequestParam Long extraCode, HttpServletResponse response) {
 		try {
 			boolean result = reservationService.addExtraToReservation(resNum, extraCode);
-			return ResponseEntity.ok(result);
+			response.setStatus(HttpStatus.OK.value());
+			return result;
 		} catch (RuntimeException e) {
-			return ResponseEntity.notFound().build();
+			response.setStatus(HttpStatus.NOT_FOUND.value());
+			return false;
 		} catch (Exception e) {
-			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+			response.setStatus(HttpStatus.INTERNAL_SERVER_ERROR.value());
+			return false;
 		}
 	}
 
-	@Operation(summary = "Return the car", description = "Completes the reservation and updates car location")
+	@Operation(summary = "Return the car", description = "Completes the reservation and returns the car")
 	@ApiResponses(value = {
 			@ApiResponse(responseCode = "200", description = "Car return completed successfully", content = @Content(schema = @Schema(implementation = Boolean.class))),
-			@ApiResponse(responseCode = "404", description = "Reservation not found", content = @Content),
+			@ApiResponse(responseCode = "404", description = "Reservation or Car not found", content = @Content),
 			@ApiResponse(responseCode = "500", description = "Internal Server Error", content = @Content) })
 	@PutMapping("/{resNum}/return")
-	public ResponseEntity<Boolean> returnCar(@PathVariable String resNum) {
+	public Boolean returnCar(@PathVariable String resNum, HttpServletResponse response) {
 		try {
 			boolean result = reservationService.returnCar(resNum);
-			return ResponseEntity.ok(result);
+			response.setStatus(HttpStatus.OK.value());
+			return result;
 		} catch (RuntimeException e) {
-			return ResponseEntity.notFound().build();
+			response.setStatus(HttpStatus.NOT_FOUND.value());
+			return false;
 		} catch (Exception e) {
-			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+			response.setStatus(HttpStatus.INTERNAL_SERVER_ERROR.value());
+			return false;
 		}
 	}
 
 	@Operation(summary = "Cancel a reservation", description = "Cancels an active reservation")
 	@ApiResponses(value = {
 			@ApiResponse(responseCode = "200", description = "Reservation cancelled successfully", content = @Content(schema = @Schema(implementation = Boolean.class))),
-			@ApiResponse(responseCode = "404", description = "Reservation not found", content = @Content),
+			@ApiResponse(responseCode = "404", description = "Reservation number not found", content = @Content),
 			@ApiResponse(responseCode = "500", description = "Internal Server Error", content = @Content) })
 	@PutMapping("/{resNum}/cancel")
-	public ResponseEntity<Boolean> cancelReservation(@PathVariable String resNum) {
+	public Boolean cancelReservation(@PathVariable String resNum, HttpServletResponse response) {
 		try {
 			boolean result = reservationService.cancelReservation(resNum);
-			return ResponseEntity.ok(result);
+			response.setStatus(HttpStatus.OK.value());
+			return result;
 		} catch (RuntimeException e) {
-			return ResponseEntity.notFound().build();
+			response.setStatus(HttpStatus.NOT_FOUND.value());
+			return false;
 		} catch (Exception e) {
-			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+			response.setStatus(HttpStatus.INTERNAL_SERVER_ERROR.value());
+			return false;
 		}
 	}
 
@@ -122,14 +138,17 @@ public class ReservationController {
 			@ApiResponse(responseCode = "404", description = "Reservation not found", content = @Content),
 			@ApiResponse(responseCode = "500", description = "Internal Server Error", content = @Content) })
 	@DeleteMapping("/{resNum}")
-	public ResponseEntity<Boolean> deleteReservation(@PathVariable String resNum) {
+	public Boolean deleteReservation(@PathVariable("resNum") String resNum, HttpServletResponse response) {
 		try {
 			boolean result = reservationService.deleteReservation(resNum);
-			return ResponseEntity.ok(result);
+			response.setStatus(HttpStatus.OK.value());
+			return result;
 		} catch (RuntimeException e) {
-			return ResponseEntity.notFound().build();
+			response.setStatus(HttpStatus.NOT_FOUND.value());
+			return false;
 		} catch (Exception e) {
-			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+			response.setStatus(HttpStatus.INTERNAL_SERVER_ERROR.value());
+			return false;
 		}
 	}
 }
