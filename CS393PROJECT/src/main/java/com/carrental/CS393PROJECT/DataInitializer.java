@@ -85,7 +85,7 @@ public class DataInitializer implements CommandLineRunner {
 		car3.setMileage(90000);
 		car3.setTransmissionType(TransmissionType.MANUAL);
 		car3.setCategory(CarCategory.MINIVAN);
-		car3.setStatus(CarStatus.AVAILABLE);
+		car3.setStatus(CarStatus.BEING_SERVICED);
 		car3.setDailyPrice(2200.0);
 		car3.setLocation(loc2);
 		carService.registerCar(car3);

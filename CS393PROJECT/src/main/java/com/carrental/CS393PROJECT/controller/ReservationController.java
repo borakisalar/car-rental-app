@@ -52,7 +52,6 @@ public class ReservationController {
 			response.setStatus(HttpStatus.NOT_ACCEPTABLE.value());
 			return null;
 		} catch (Exception e) {
-			e.printStackTrace();
 			response.setStatus(HttpStatus.INTERNAL_SERVER_ERROR.value());
 			return null;
 		}
