@@ -41,11 +41,12 @@ public class CarController {
 	@GetMapping("/search")
 	public List<CarDTO> searchCars(@RequestParam(name = "category", required = false) CarCategory category,
 			@RequestParam(name = "transmission", required = false) TransmissionType transmission,
-			@RequestParam(name = "minPrice", required = false) Double minPrice, @RequestParam(name = "maxPrice", required = false) Double maxPrice,
+			@RequestParam(name = "minPrice", required = false) Double minPrice,
+			@RequestParam(name = "maxPrice", required = false) Double maxPrice,
 			@RequestParam(name = "start") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime start,
 			@RequestParam(name = "end") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime end,
-			@RequestParam(name = "seats", required = false) Integer seats, @RequestParam(name = "pickupLocCode") Long pickupLocCode,
-			HttpServletResponse response) {
+			@RequestParam(name = "seats", required = false) Integer seats,
+			@RequestParam(name = "pickupLocCode") Long pickupLocCode, HttpServletResponse response) {
 
 		List<CarDTO> cars = carService.searchAvailableCars(category, transmission, minPrice, maxPrice, start, end,
 				seats, pickupLocCode);

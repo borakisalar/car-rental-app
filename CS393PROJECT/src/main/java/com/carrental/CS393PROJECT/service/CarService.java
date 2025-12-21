@@ -45,7 +45,7 @@ public class CarService {
 
 		boolean isUsed = reservationRepository.existsByCarBarcode(barcode);
 		if (isUsed) {
-			throw new RuntimeException("Car cannot be deleted; it is used in a reservation.");
+			return false;
 		}
 
 		carRepository.delete(car);

@@ -89,6 +89,34 @@ public class DataInitializer implements CommandLineRunner {
 		car3.setDailyPrice(2200.0);
 		car3.setLocation(loc2);
 		carService.registerCar(car3);
+		
+		Car car4 = new Car();
+		car4.setBarcode("CAR004");
+		car4.setLicensePlateNumber("34CSC9837");
+		car4.setBrand("Renault");
+		car4.setModel("Clio");
+		car4.setNumberOfSeats(5);
+		car4.setMileage(60000);
+		car4.setTransmissionType(TransmissionType.AUTOMATIC);
+		car4.setCategory(CarCategory.COMPACT_CAR);
+		car4.setStatus(CarStatus.AVAILABLE);
+		car4.setDailyPrice(1400.0);
+		car4.setLocation(loc3);
+		carService.registerCar(car4);
+		
+		Car car5 = new Car();
+		car5.setBarcode("CAR005");
+		car5.setLicensePlateNumber("35DKF2394");
+		car5.setBrand("Fiat");
+		car5.setModel("Egea");
+		car5.setNumberOfSeats(5);
+		car5.setMileage(95000);
+		car5.setTransmissionType(TransmissionType.MANUAL);
+		car5.setCategory(CarCategory.LARGE_CAR);
+		car5.setStatus(CarStatus.AVAILABLE);
+		car5.setDailyPrice(1500);
+		car5.setLocation(loc4);
+		carService.registerCar(car5);
 
 		Member member1 = new Member();
 		member1.setName("Ahmet");
