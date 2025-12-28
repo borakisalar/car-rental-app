@@ -1,6 +1,6 @@
-# Car Rental System - CS393 PROJECT
+# Car Rental Application - CS393 PROJECT
 
-A comprehensive Car Rental Management System built with Spring Boot, Java, and MySQL. This project provides a robust backend for managing car fleets, members, reservations, and location-based rentals.
+A comprehensive Car Rental Management System built with Spring Boot, Java, and MySQL. This project provides a robust backend for managing cars, members, reservations, Extra Services, and location-based rentals.
 
 ## Features
 
